@@ -6,13 +6,17 @@ import org.springframework.web.bind.annotation.RestController;
 import webservice.service.HelloService;
 
 @RestController
-public class Hello {
+public class HelloController {
+
+    private final HelloService helloService;
 
     @Autowired
-    private HelloService helloService;
+    public HelloController(HelloService helloService) {
+        this.helloService = helloService;
+    }
 
     @RequestMapping("/")
-    String hello(){
+    String hello() {
         return helloService.hello();
     }
 }

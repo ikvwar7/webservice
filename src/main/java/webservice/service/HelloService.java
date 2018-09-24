@@ -9,7 +9,7 @@ public class HelloService {
     @Value("${webservice.hello}")
     private String hello;
 
-    public String hello(){
+    public String hello() {
         return hello;
     }
 }
