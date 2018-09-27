@@ -1,0 +1,27 @@
+<!doctype html>
+<html ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+<script src="list.js"></script>
+<div ng-controller="myController">
+    <table>
+        <tr>
+            <th width="200">id</th>
+            <th width="200">ip-адрес клиента</th>
+            <th width="100">время запроса</th>
+            <th width="100">клиент</th>
+        </tr>
+        <tr ng-repeat="client in clients">
+            <th width="200">{{$index+1}}</th>
+            <td align="middle" width="200">{{client.ip}}</td>
+            <td width="100" align="middle">{{client.time}}</td>
+            <td width="100" align="middle">{{client.browser}}</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
