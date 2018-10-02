@@ -1,6 +1,5 @@
 package webservice.dao;
 
-import com.mongodb.bulk.DeleteRequest;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import webservice.domain.ClientInfo;
 import java.util.List;
 
 @Component
-public class DbClientInfoDao implements ClienInfoDao {
+public class DbClientInfoDao implements ClientInfoDao {
 
     private final MongoTemplate mongoTemplate;
 

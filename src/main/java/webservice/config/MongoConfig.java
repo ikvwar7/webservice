@@ -10,15 +10,11 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 
 @Configuration
 public abstract class MongoConfig extends AbstractMongoConfiguration {
-    public MongoConfig() {
-        super();
-    }
 
     @Override
     @Bean
-    public MongoTemplate mongoTemplate() throws Exception {
-        MongoTemplate mongoTemplate = new MongoTemplate(mongoClient(), "ClientsInfo");
-        return mongoTemplate;
+    public MongoTemplate mongoTemplate() {
+        return new MongoTemplate(mongoClient(), "ClientsInfo");
     }
 
     @Bean
@@ -29,7 +25,6 @@ public abstract class MongoConfig extends AbstractMongoConfiguration {
 
     @Override
     public MongoClient mongoClient() {
-        MongoClient mongoClient = new MongoClient("localhost", 27017);
-        return mongoClient;
+        return new MongoClient("localhost", 27017);
     }
 }

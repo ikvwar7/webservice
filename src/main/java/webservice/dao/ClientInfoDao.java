@@ -4,7 +4,7 @@ import webservice.domain.ClientInfo;
 
 import java.util.List;
 
-public interface ClienInfoDao {
+public interface ClientInfoDao {
 
     List<ClientInfo> findAll();
 
