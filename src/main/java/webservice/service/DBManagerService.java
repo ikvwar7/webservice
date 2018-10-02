@@ -1,56 +1,46 @@
 package webservice.service;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCommandException;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import webservice.dao.DbClientInfoDao;
+import webservice.domain.ClientInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import static com.mongodb.client.model.Filters.eq;
 
 @Component
 public class DBManagerService {
-    private MongoClient mongoClient = new MongoClient("localhost", 27017);
-    private MongoDatabase database = mongoClient.getDatabase("ClientsInfo");
 
+    private final DbClientInfoDao dbClientInfoDao;
 
-    public void insertClientInfo(HttpServletRequest htr) {
-        MongoCollection<Document> mongoCollection = getCollection("clientsInfo");
-        Document document = new Document();
-        document.put("ip", htr.getRemoteAddr());
-        document.put("time", LocalDateTime.now());
-        document.put("browser", htr.getHeader("User-Agent"));
-        //mongoCollection.deleteMany(eq("ip", htr.getRemoteAddr()));
-        mongoCollection.insertOne(document);
+    private static final Logger logger = LoggerFactory.getLogger(DBManagerService.class);
+
+    @Autowired
+    public DBManagerService(DbClientInfoDao dbClientInfoDao) {
+        this.dbClientInfoDao = dbClientInfoDao;
     }
 
-    public List<Document> getClientsInfo() {
-        MongoCollection<Document> mongoCollection = getCollection("clientsInfo");
-        FindIterable<Document> docs = mongoCollection.find();
-        List<Document> list = new ArrayList<>();
-        Iterator<Document> it = docs.iterator();
-        while (it.hasNext()) {
-            list.add(it.next());
-        }
-        return list;
+    public void saveClient(HttpServletRequest htr) {
+        dbClientInfoDao.save(new ClientInfo(htr.getRemoteAddr(), LocalDateTime.now(), htr.getHeader("User-Agent")));
+        logger.info("Saved 1 record");
     }
 
-    private MongoCollection<Document> getCollection(String name) {
-        MongoCollection<Document> mongoCollection;
-        try {
-            database.createCollection(name);
-        } catch (MongoCommandException ignored) {
-        } finally {
-            mongoCollection = database.getCollection(name);
-        }
-        return mongoCollection;
+    public List<ClientInfo> getClients() {
+        return dbClientInfoDao.findAll();
+    }
+
+    public List<ClientInfo> getByIp(String ip) {
+        return dbClientInfoDao.findByIp(ip);
+    }
+
+    public void deleteByIp(String ip) {
+        logger.info("Count of deleted record: {}", dbClientInfoDao.deleteByIp(ip));
+    }
+
+    public void updateByIp(String ip) {
+        logger.info("Count of updated record: {}", dbClientInfoDao.updateByIp(ip));
     }
 }

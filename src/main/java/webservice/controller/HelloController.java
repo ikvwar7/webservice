@@ -1,11 +1,12 @@
 package webservice.controller;
 
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import webservice.domain.ClientInfo;
 import webservice.service.DBManagerService;
 import webservice.service.HelloService;
 
@@ -26,14 +27,28 @@ public class HelloController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     public String hello(HttpServletRequest httpServletRequest) {
-        dbManagerService.insertClientInfo(httpServletRequest);
+        dbManagerService.saveClient(httpServletRequest);
         return helloService.hello();
     }
 
     @RequestMapping(value = "/getClients", method = RequestMethod.GET)
-    public List<Document> getClients(HttpServletRequest htr) {
-        List<Document> list = dbManagerService.getClientsInfo();
-        return list;
+    public List<ClientInfo> getClients(HttpServletRequest htr) {
+        return dbManagerService.getClients();
+    }
+
+    @RequestMapping(value = "/getClientByIp/{ip}", method = RequestMethod.GET)
+    public List<ClientInfo> findByIp(@PathVariable String ip) {
+        return dbManagerService.getByIp(ip);
+    }
+
+    @RequestMapping(value = "/updateClientByIp/{ip}", method = RequestMethod.GET)
+    public void updateByIp(@PathVariable String ip) {
+        dbManagerService.updateByIp(ip);
+    }
+
+    @RequestMapping(value = "/deleteClientByIp/{ip}", method = RequestMethod.GET)
+    public void deleteByIp(@PathVariable String ip) {
+        dbManagerService.deleteByIp(ip);
     }
 }
 
