@@ -1,12 +1,21 @@
 version: '2'
 services:
   webserv:
+    container_name: webservice
     build: .
     ports:
       - '8080:8080'
+    expose:
+      - "8080"
     links:
       - mongo
+#    depends_on:
+#      - mongo
   mongo:
+    container_name: mongodb
+#    command: mongod
     image: mongo:3.4
-    ports:
-    - '27017:27017'
+    expose:
+      - "27017"
+#    ports:
+#      - '27017:27017'
