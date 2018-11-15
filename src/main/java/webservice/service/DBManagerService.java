@@ -14,9 +14,8 @@ import java.util.List;
 @Component
 public class DBManagerService {
 
-    private final ClientInfoDao clientInfoDao;
-
     private static final Logger logger = LoggerFactory.getLogger(DBManagerService.class);
+    private final ClientInfoDao clientInfoDao;
 
     @Autowired
     public DBManagerService(ClientInfoDao clientInfoDao) {
