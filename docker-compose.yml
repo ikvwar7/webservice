@@ -2,9 +2,28 @@ version: '2'
 services:
   webserv:
     container_name: webservice
+    logging:
+      driver: "gelf"
+      options:
+        gelf-address: udp://localhost:12201
     build: .
     network_mode: "host"
+    depends_on:
+     - elk
+
   mongo:
     container_name: mongodb
     image: mongo:3.4
+    network_mode: "host"
+
+  elk:
+    container_name: ELK
+    image: myelk # sebp/elk
+    volumes:
+       - /home/kir/my.conf:/etc/logstash/conf.d/my.conf
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "5044:5044"
+      - "12201:12201/udp"
     network_mode: "host"
